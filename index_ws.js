@@ -8,11 +8,11 @@ app.get('/', function(req, res) {
 
 server.on('request', app);
 
-process.on('SIGINT', () => {
-  server.close(() => {
-    shutdownDB(); 
-  });
-});
+// process.on('SIGINT', () => {
+//   server.close(() => {
+//     shutdownDB(); 
+//   });
+// });
 
 server.listen(3000, function () { console.log('Listening on 3000'); });
 
@@ -27,8 +27,8 @@ wss.on('connection', function connection(ws) {
   console.log('clients connected: ', numClients);
 
   // Log number of visitors at current moment
-  db.run(`INSERT INTO visitors (count, time)
-    VALUES (${numClients}, datetime('now'))`);
+  // db.run(`INSERT INTO visitors (count, time)
+  //   VALUES (${numClients}, datetime('now'))`);
 
   wss.broadcast(`Current visitors: ${numClients}`);
 
@@ -61,28 +61,28 @@ wss.broadcast = function broadcast(data) {
 
 /** Database stuff **/
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
+// const sqlite3 = require('sqlite3').verbose();
+// const db = new sqlite3.Database(':memory:');
 
-// .seralize ensures DB is set up before any queries
-db.serialize(() => {
-    db.run(`CREATE TABLE visitors (
-      count INTEGER,
-      time TEXT
-      )`);
-});
+// // .seralize ensures DB is set up before any queries
+// db.serialize(() => {
+//     db.run(`CREATE TABLE visitors (
+//       count INTEGER,
+//       time TEXT
+//       )`);
+// });
 
-function getCounts() {
-    db.each("SELECT * FROM visitors", (err, row) => {
-      console.log(row);
-    });
-}
+// function getCounts() {
+//     db.each("SELECT * FROM visitors", (err, row) => {
+//       console.log(row);
+//     });
+// }
 
-function shutdownDB() {
-  getCounts();
-  console.log('shutting down DB');
-  db.close();
-}
+// function shutdownDB() {
+//   getCounts();
+//   console.log('shutting down DB');
+//   db.close();
+// }
 
 
 
